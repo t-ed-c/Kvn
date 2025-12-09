@@ -28,14 +28,16 @@ int16_t pid_compute(PIDController *pid, int16_t setpoint, int16_t measured) {
     pid->integral += error;
     
     // Anti-windup: limit integral
-    float max_integral = (float)pid->output_max / pid->ki;
-    if (pid->integral > max_integral) {
-        pid->integral = max_integral;
-    } else if (pid->integral < -max_integral) {
-        pid->integral = -max_integral;
+    float i_term = 0.0f;
+    if (pid->ki != 0.0f) {
+        float max_integral = (float)pid->output_max / pid->ki;
+        if (pid->integral > max_integral) {
+            pid->integral = max_integral;
+        } else if (pid->integral < -max_integral) {
+            pid->integral = -max_integral;
+        }
+        i_term = pid->ki * pid->integral;
     }
-    
-    float i_term = pid->ki * pid->integral;
     
     // Derivative term
     float derivative = error - pid->last_error;

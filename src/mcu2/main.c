@@ -10,7 +10,8 @@
 #include "encoder.h"
 #include "pid.h"
 
-#define F_CPU 16000000UL
+// Position control speed setting (PWM duty cycle 0-255)
+#define POSITION_CONTROL_SPEED 150
 
 // Control modes
 typedef enum {
@@ -178,7 +179,7 @@ static void position_control(void) {
         // Simple bang-bang control for position
         // Could be enhanced with PID for smoother motion
         motor_set_direction(MOTOR_FORWARD);
-        motor_set_speed(150);  // Medium speed for position control
+        motor_set_speed(POSITION_CONTROL_SPEED);
     }
 }
 

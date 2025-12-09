@@ -8,8 +8,6 @@
 #include "i2c_master.h"
 #include "keypad.h"
 
-#define F_CPU 16000000UL
-
 // Application states
 typedef enum {
     APP_MODE_SPEED,

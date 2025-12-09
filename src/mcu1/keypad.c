@@ -1,6 +1,10 @@
 #include "keypad.h"
 #include <util/delay.h>
 
+// Debounce timing constants (in milliseconds)
+#define KEYPAD_DEBOUNCE_DELAY 50
+#define KEYPAD_POLL_DELAY     10
+
 void keypad_init(void) {
     // Configure keypad pins as input
     KEYPAD_DDR &= ~((1 << KEYPAD_DA_PIN) | (1 << KEYPAD_D0_PIN) | 
@@ -32,15 +36,15 @@ uint8_t keypad_read(void) {
     if (KEYPAD_PORT & (1 << KEYPAD_D3_PIN)) key |= 0x08;
     
     // Debounce delay
-    _delay_ms(50);
+    _delay_ms(KEYPAD_DEBOUNCE_DELAY);
     
     // Wait for key release (DA goes low)
     while (keypad_available()) {
-        _delay_ms(10);
+        _delay_ms(KEYPAD_POLL_DELAY);
     }
     
     // Additional debounce after release
-    _delay_ms(50);
+    _delay_ms(KEYPAD_DEBOUNCE_DELAY);
     
     return key;
 }
